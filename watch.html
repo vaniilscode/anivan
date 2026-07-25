@@ -78,7 +78,7 @@
         </a>
     </div>
 
-    <script>
+        <script>
         const params = new URLSearchParams(window.location.search);
         // Очищаем название от возможного лишнего дефиса в начале строки
         let title = params.get('t');
@@ -93,14 +93,17 @@
             titleEl.textContent = title;
             document.title = title + " - AniVan";
 
-            // ВСТАВЛЯЕМ ПРЯМУЮ БЕЗОПАСНУЮ ССЫЛКУ БЕЗ ПЛЮСОВ И ОПЕЧАТОК
-            playerEl.src = "https://vidsrc.cc" + encodedTitle;
+            // 1. ТЕПЕРЬ ПЕРЕМЕННАЯ СОЗДАНА: Безопасно кодируем название аниме
+            const encodedTitle = encodeURIComponent(title);
 
+            // 2. ИСПРАВЛЕНО: Полный и правильный адрес для автопоиска плеера
+            playerEl.src = "https://vidsrc.cc" + encodedTitle;
 
         } else {
             titleEl.textContent = "Ошибка: аниме не найдено";
             titleEl.style.color = "#ff4d4d";
         }
     </script>
+
 </body>
 </html>
