@@ -95,7 +95,9 @@
             document.title = title + " - AniVan";
 
             // СРАЗУ подставляем железобетонную прямую ссылку на видеофайл от Google
-            playerEl.src = "https://apicollaps.cc" + encodeURIComponent();
+            // ПРАВИЛЬНО: Полный адрес поиска + переменная внутри скобок!
+playerEl.src = "https://apicollaps.cc" + encodeURIComponent(title);
+
         } else {
             titleEl.textContent = "Ошибка: аниме не найдено";
             titleEl.style.color = "#ff4d4d";
