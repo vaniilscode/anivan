@@ -83,7 +83,7 @@
         </a>
     </div>
 
-    <script>
+        <script>
         const params = new URLSearchParams(window.location.search);
         let title = params.get('t');
 
@@ -94,13 +94,14 @@
             titleEl.textContent = title;
             document.title = title + " - AniVan";
 
-            playerEl.src = "https://html5demos.com";
-            playerEl.src = "https://kinobox.tv" + encodedTitle;
+            // СРАЗУ подставляем железобетонную прямую ссылку на видеофайл от Google
+            playerEl.src = "https://googleapis.com";
 
         } else {
             titleEl.textContent = "Ошибка: аниме не найдено";
             titleEl.style.color = "#ff4d4d";
         }
     </script>
+
 </body>
 </html>
