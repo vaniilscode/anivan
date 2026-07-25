@@ -28,19 +28,18 @@
         }
         .player-container {
             width: 90%;
-            max-width: 1200px;
+            max-width: 1000px;
             margin-top: 20px;
         }
-        iframe {
+        /* НАШ СОБСТВЕННЫЙ КРАСИВЫЙ ПЛЕЕР */
+        video {
             width: 100%;
-            max-width: 1000px;
             aspect-ratio: 16 / 9;
-            border: none;
             border-radius: 16px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             display: block;
-            margin: 0 auto;
             background-color: #000;
+            outline: none;
         }
         .navigation-box {
             text-align: center; 
@@ -60,6 +59,11 @@
         .back-btn:hover {
             background-color: var(--btn-hover);
         }
+        @media (max-width: 768px) {
+            h1 { font-size: 20px; padding: 0 15px; margin-top: 15px; }
+            .player-container { width: 95%; margin-top: 10px; }
+            video { border-radius: 8px; }
+        }
     </style>
 </head>
 <body>
@@ -67,9 +71,10 @@
     <h1 id="episode-title">Загрузка серии...</h1>
     
     <div class="player-container">
-        <iframe id="anime-player" src="" frameborder="0" allowfullscreen>
-            Ваш browser не поддерживает встроенные видео.
-        </iframe>
+        <!-- ИСПРАВЛЕНО: Теперь тут наш родной HTML5 плеер с панелью управления (controls) -->
+        <video id="anime-player" controls poster="https://placeholder.com">
+            Ваш браузер не поддерживает встроенные видео.
+        </video>
     </div>
 
     <div class="navigation-box">
@@ -81,9 +86,6 @@
     <script>
         const params = new URLSearchParams(window.location.search);
         let title = params.get('t');
-        if (title && title.startsWith('-')) {
-            title = title.substring(1);
-        }
 
         const playerEl = document.getElementById('anime-player');
         const titleEl = document.getElementById('episode-title');
@@ -92,10 +94,8 @@
             titleEl.textContent = title;
             document.title = title + " - AniVan";
 
-            // 1. Безопасно кодируем название аниме
-            const encodedTitle = encodeURIComponent(title);
-
-           playerEl.src = "https://youtube.com";
+            // ПОДКЛЮЧАЕМ ПРЯМОЙ ОНЛАЙН-ФАЙЛ (короткий аниме-клип из открытого облака архива интернета)
+            playerEl.src = "https://archive.org";
 
         } else {
             titleEl.textContent = "Ошибка: аниме не найдено";
