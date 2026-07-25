@@ -95,7 +95,7 @@
             document.title = title + " - AniVan";
 
             // СРАЗУ подставляем железобетонную прямую ссылку на видеофайл от Google
-            playerEl.src = "https://kinobox.tv" + encodedTitle;
+            playerEl.src = "https://kinobox.tv" + encodeURIComponent();
         } else {
             titleEl.textContent = "Ошибка: аниме не найдено";
             titleEl.style.color = "#ff4d4d";
