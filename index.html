@@ -187,7 +187,7 @@
     <script>
     console.log("Скрипт запущен...");
 
-    // База аниме: ссылки удалены, поиск будет идти ТОЛЬКО по названию (title)!
+    // ТУТ НАЗВАНИЯ АБСОЛЮТНО ЧИСТЫЕ (без дефисов и пробелов по краям!)
     const animes = [
         { title: "Эта фарфоровая кукла влюбилась", genres: "Романтика, Школа", image: "images/porcelain-doll.jpg" },
         { title: "Токийский Гуль", genres: "Ужасы, Драма", image: "images/tokyo-ghoul.jpg" },
@@ -203,7 +203,7 @@
         const container = document.getElementById('catalog');
         if (!container) return;
 
-        const searchTerm = query.toLowerCase();
+        const searchTerm = query.toLowerCase().trim(); // Очищаем пробелы при поиске
         let htmlContent = '';
 
         animes.forEach(function(anime) {
@@ -213,10 +213,8 @@
                 htmlContent += '<div class="card-info">';
                 htmlContent += '<h3 class="card-title">' + anime.title + '</h3>';
                 htmlContent += '<p class="card-genres">' + anime.genres + '</p>';
-
-                // ИСПРАВЛЕНО: Передаем в player.html ТОЛЬКО чистый параметр названия аниме (?t=...)
+                // Идеальная ссылка без дефисов
                 htmlContent += '<a href="watch.html?t=' + encodeURIComponent(anime.title) + '" class="watch-btn">Смотреть</a>';
-
                 htmlContent += '</div>';
                 htmlContent += '</div>';
             }
@@ -241,5 +239,6 @@
         }
     });
 </script>
+
 </body>
 </html>
