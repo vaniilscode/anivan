@@ -214,7 +214,8 @@
                 htmlContent += '<h3 class="card-title">' + anime.title + '</h3>';
                 htmlContent += '<p class="card-genres">' + anime.genres + '</p>';
                 // Идеальная ссылка без дефисов
-                htmlContent += '<a href="watch.html?t=' + encodeURIComponent(anime.title) + '" class="watch-btn">Смотреть</a>';
+                // Теперь кнопка передает и название, и наш проверочный ID!
+htmlContent += '<a href="watch.html?t=' + encodeURIComponent(anime.title) + '&id=19815" class="watch-btn">Смотреть</a>';
                 htmlContent += '</div>';
                 htmlContent += '</div>';
             }
