@@ -31,15 +31,14 @@
             max-width: 1000px;
             margin-top: 20px;
         }
-        /* НАШ СОБСТВЕННЫЙ КРАСИВЫЙ ПЛЕЕР */
-        video {
+        iframe {
             width: 100%;
             aspect-ratio: 16 / 9;
+            border: none;
             border-radius: 16px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             display: block;
             background-color: #000;
-            outline: none;
         }
         .navigation-box {
             text-align: center; 
@@ -59,33 +58,26 @@
         .back-btn:hover {
             background-color: var(--btn-hover);
         }
-        @media (max-width: 768px) {
-            h1 { font-size: 20px; padding: 0 15px; margin-top: 15px; }
-            .player-container { width: 95%; margin-top: 10px; }
-            video { border-radius: 8px; }
-        }
     </style>
 </head>
 <body>
 
-    <h1 id="episode-title">Загрузка серии...</h1>
+    <h1 id="episode-title">Загрузка серий...</h1>
     
     <div class="player-container">
-        <!-- ИСПРАВЛЕНО: Теперь тут наш родной HTML5 плеер с панелью управления (controls) -->
-        <video id="anime-player" controls poster="https://placeholder.com">
-            Ваш браузер не поддерживает встроенные видео.
-        </video>
+        <!-- Используем iframe для подгрузки плеера по ID -->
+        <iframe id="anime-player" src="" allowfullscreen></iframe>
     </div>
 
     <div class="navigation-box">
-        <a href="index.html" class="back-btn">
-            ← Назад в каталог
-        </a>
+        <a href="index.html" class="back-btn">← Назад в каталог</a>
     </div>
 
-        <script>
+    <script>
+        // Получаем параметры из ссылки
         const params = new URLSearchParams(window.location.search);
         let title = params.get('t');
+        let shikimoriId = params.get('id'); // Читаем ID из ссылки
 
         const playerEl = document.getElementById('anime-player');
         const titleEl = document.getElementById('episode-title');
@@ -93,14 +85,13 @@
         if (title) {
             titleEl.textContent = title;
             document.title = title + " - AniVan";
-
-            // СРАЗУ подставляем железобетонную прямую ссылку на видеофайл от Google
-            // ПРАВИЛЬНО: Полный адрес поиска + переменная внутри скобок!
-            playerEl.src = "https://kp.apiget.ru";
-    } else {
-            titleEl.textContent = "Ошибка: аниме не найдено";
-            titleEl.style.color = "#ff4d4d";
         }
+
+        // Если ID передан в ссылку — используем его, иначе ставим Токийского Гуля по умолчанию (19815)
+        const activeId = shikimoriId ? shikimoriId : "19815";
+
+        // Подключаем стабильный бесплатный плеер по ID
+        playerEl.src = "https://shikicinema.org" + activeId;
     </script>
 </body>
 </html>
