@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>AniVan — Главная страница каталога</title>
+    <style>
+        :root {
+            --bg-color: #0f0f13;
+            --card-bg: #1c1c22;
+            --text-main: #f5f5dc;
+            --accent: #f5f5dc;
+            --border: #2c2c35;
+        }
+
+        body { 
+            margin: 0; 
+            padding: 0; 
+            background-color: var(--bg-color); 
+            color: var(--text-main); 
+            font-family: sans-serif; 
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo { font-size: 24px; font-weight: bold; color: var(--accent); }
+        
+        .search-bar {
+            background: #2c2c35;
+            border: 1px solid var(--border);
+            padding: 10px 20px;
+            border-radius: 30px;
+            width: 400px;
+            color: white;
+            outline: none;
+        }
+
+        .profile-btn { background: none; border: none; color: var(--accent); cursor: pointer; font-size: 16px; }
+
+        h2 { padding: 20px 40px; color: var(--accent); margin-top: 0; }
+        
+        .catalog-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, 220px); 
+            gap: 25px; 
+            padding: 20px 40px; 
+            width: 100%;
+            box-sizing: border-box;
+            justify-content: start; /* Карточки ровно по левому краю */
+        }
+        
+        .anime-card { 
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            background: var(--card-bg); 
+            border-radius: 12px; 
+            overflow: hidden; 
+            cursor: pointer; 
+            transition: transform 0.3s;
+            animation: fadeIn 0.4s ease-in-out;
+            text-decoration: none;
+        }
+
+        .anime-card:hover { 
+            transform: translateY(-5px); 
+        }
+
+        .anime-card img { 
+            width: 100%; 
+            height: 300px;
+            object-fit: cover; 
+            background-color: #111; 
+            display: block;
+        }
+
+        .card-info {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            flex-grow: 1;
+            padding: 12px;
+            box-sizing: border-box;
+        }
+
+        .card-title { 
+            font-size: 15px;
+            font-weight: bold; 
+            margin: 0 0 8px 0;
+            white-space: nowrap; 
+            overflow: hidden; 
+            text-overflow: ellipsis; 
+            color: var(--accent);
+        }
+
+        .card-genres { 
+            font-size: 11px;
+            color: #aaa; 
+            margin: 0;
+        }
+
+        .watch-btn {
+            display: block;
+            width: 100%;
+            padding: 8px 8px;
+            background-color: #ff4444;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+            margin-top: 12px;
+            transition: background-color 0.2s ease;
+            box-sizing: border-box;
+        }
+
+        .watch-btn:hover {
+            background-color: #cc3333;
+        }
+
+        .video-unavailable {
+            color: #666;
+            font-size: 12px;
+            text-align: center;
+            padding-top: 10px;
+        }
+
+        .js-error-msg {
+            color: #ff4444;
+            padding: 20px;
+            text-align: center;
+            font-weight: bold;
+            border: 2px dashed #ff4444;
+            margin: 20px 40px;
+            display: none;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Адаптация для мобильных */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 15px;
+                padding: 15px 20px;
+            }
+
+            .search-bar { width: 100%; }
+            h2 { padding: 15px 20px; font-size: 20px; }
+            .catalog-grid {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+                gap: 15px;
+                padding: 0 20px;
+            }
+            .anime-card img { height: 200px; }
+            .card-title { font-size: 13px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">AniVan</div>
+        <input type="text" class="search-bar" placeholder="Быстрый поиск аниме..." oninput="filterAnimes(this.value)">
+        <button class="profile-btn">Профиль</button>
+    </header>
+
+    <main>
+        <h2>Популярные новинки</h2>
+        <div class="catalog-grid" id="catalog"></div>
+        <div id="js-error" class="js-error-msg">
+            ОШИБКА: JavaScript не смог загрузить список аниме. Проверьте консоль (F12).
+        </div>
+    </main>
+
+    <script>
+    console.log("Скрипт запущен...");
+
+    // База аниме: ссылки удалены, поиск будет идти ТОЛЬКО по названию (title)!
+    const animes = [
+        { title: "Эта фарфоровая кукла влюбилась", genres: "Романтика, Школа", image: "images/porcelain-doll.jpg" },
+        { title: "Токийский Гуль", genres: "Ужасы, Драма", image: "images/tokyo-ghoul.jpg" },
+        { title: "Атака титанов", genres: "Экшен, Драма", image: "images/attack-on-titan.jpg" },
+        { title: "Наруто Ураганные Хроники", genres: "Приключения, Экшен", image: "images/naruto.jpg" }
+    ];
+
+    function openProfile() {
+        alert('Здесь откроется страница профиля пользователя');
+    }
+
+    function filterAnimes(query) {
+        const container = document.getElementById('catalog');
+        if (!container) return;
+
+        const searchTerm = query.toLowerCase();
+        let htmlContent = '';
+
+        animes.forEach(function(anime) {
+            if (anime.title.toLowerCase().includes(searchTerm)) {
+                htmlContent += '<div class="anime-card">';
+                htmlContent += '<img src="' + anime.image + '" alt="' + anime.title + '" onerror="this.src=\'https://placeholder.com\'">';
+                htmlContent += '<div class="card-info">';
+                htmlContent += '<h3 class="card-title">' + anime.title + '</h3>';
+                htmlContent += '<p class="card-genres">' + anime.genres + '</p>';
+
+                // ИСПРАВЛЕНО: Передаем в player.html ТОЛЬКО чистый параметр названия аниме (?t=...)
+                htmlContent += '<a href="watch.html?t=' + encodeURIComponent(anime.title) + '" class="watch-btn">Смотреть</a>';
+
+                htmlContent += '</div>';
+                htmlContent += '</div>';
+            }
+        });
+
+        if (htmlContent === '') {
+            container.innerHTML = '<p style="color:#aaa; margin-top:20px; text-align:center;">Ничего не найдено 😔</p>';
+        } else {
+            container.innerHTML = htmlContent;
+        }
+    }
+
+    function renderCatalog() {
+        filterAnimes('');
+    }
+
+    window.addEventListener('load', function() {
+        renderCatalog();
+        const profileBtn = document.querySelector('.profile-btn');
+        if (profileBtn) {
+            profileBtn.addEventListener('click', openProfile);
+        }
+    });
+</script>
+</body>
+</html>

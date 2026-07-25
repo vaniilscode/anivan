@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Просмотр - AniVan</title>
+    <style>
+        :root {
+            --bg-color: #0f0f13;
+            --accent: #f5f5dc;
+            --btn-bg: #333333;
+            --btn-hover: #444444;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--accent);
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        h1 { 
+            margin-top: 30px;
+            margin-bottom: 10px; 
+            text-align: center;
+        }
+        .player-container {
+            width: 90%;
+            max-width: 1200px;
+            margin-top: 20px;
+        }
+        iframe {
+            width: 100%;
+            max-width: 1000px;
+            aspect-ratio: 16 / 9;
+            border: none;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            display: block;
+            margin: 0 auto;
+            background-color: #000;
+        }
+        .navigation-box {
+            text-align: center; 
+            margin-top: 40px;
+            margin-bottom: 40px;
+        }
+        .back-btn {
+            text-decoration: none; 
+            color: #ffffff !important; 
+            background-color: var(--btn-bg); 
+            padding: 12px 24px; 
+            border-radius: 6px; 
+            font-weight: bold; 
+            transition: background 0.3s ease;
+            display: inline-block;
+        }
+        .back-btn:hover {
+            background-color: var(--btn-hover);
+        }
+    </style>
+</head>
+<body>
+
+    <h1 id="episode-title">Загрузка серии...</h1>
+    
+    <div class="player-container">
+        <iframe id="anime-player" src="" frameborder="0" allowfullscreen>
+            Ваш браузер не поддерживает встроенные видео.
+        </iframe>
+    </div>
+
+    <div class="navigation-box">
+        <a href="index.html" class="back-btn">
+            ← Назад в каталог
+        </a>
+    </div>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        // Очищаем название от возможного лишнего дефиса в начале строки
+        let title = params.get('t');
+        if (title && title.startsWith('-')) {
+            title = title.substring(1);
+        }
+
+        const playerEl = document.getElementById('anime-player');
+        const titleEl = document.getElementById('episode-title');
+
+        if (title) {
+            titleEl.textContent = title;
+            document.title = title + " - AniVan";
+
+            // ВСТАВЛЯЕМ ПРЯМУЮ БЕЗОПАСНУЮ ССЫЛКУ БЕЗ ПЛЮСОВ И ОПЕЧАТОК
+            playerEl.src = "https://kodikapi.com" + encodedTitle + "&hide_selectors=false";
+
+        } else {
+            titleEl.textContent = "Ошибка: аниме не найдено";
+            titleEl.style.color = "#ff4d4d";
+        }
+    </script>
+</body>
+</html>
