@@ -2,244 +2,155 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>AniVan — Главная страница каталога</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AniVan - Каталог Аниме</title>
     <style>
         :root {
             --bg-color: #0f0f13;
-            --card-bg: #1c1c22;
-            --text-main: #f5f5dc;
+            --card-bg: #16161e;
             --accent: #f5f5dc;
-            --border: #2c2c35;
+            --text-main: #ffffff;
+            --text-muted: #aaa;
         }
-
-        body { 
-            margin: 0; 
-            padding: 0; 
-            background-color: var(--bg-color); 
-            color: var(--text-main); 
-            font-family: sans-serif; 
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Arial', sans-serif;
         }
-        
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 20px 40px;
-            border-bottom: 1px solid var(--border);
+            background-color: var(--card-bg);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
         }
-
-        .logo { font-size: 24px; font-weight: bold; color: var(--accent); }
-        
-        .search-bar {
-            background: #2c2c35;
-            border: 1px solid var(--border);
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--accent);
+            text-decoration: none;
+        }
+        .search-box input {
             padding: 10px 20px;
-            border-radius: 30px;
-            width: 400px;
-            color: white;
+            width: 300px;
+            border: 1px solid #333;
+            border-radius: 20px;
+            background-color: var(--bg-color);
+            color: #fff;
             outline: none;
         }
-
-        .profile-btn { background: none; border: none; color: var(--accent); cursor: pointer; font-size: 16px; }
-
-        h2 { padding: 20px 40px; color: var(--accent); margin-top: 0; }
-        
-        .catalog-grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fill, 220px); 
-            gap: 25px; 
-            padding: 20px 40px; 
+        .catalog-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 30px;
+        }
+        .anime-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease;
+        }
+        .anime-card:hover {
+            transform: translateY(-5px);
+        }
+        .anime-card img {
             width: 100%;
-            box-sizing: border-box;
-            justify-content: start; /* Карточки ровно по левому краю */
+            height: 320px;
+            object-fit: cover;
         }
-        
-        .anime-card { 
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            background: var(--card-bg); 
-            border-radius: 12px; 
-            overflow: hidden; 
-            cursor: pointer; 
-            transition: transform 0.3s;
-            animation: fadeIn 0.4s ease-in-out;
-            text-decoration: none;
-        }
-
-        .anime-card:hover { 
-            transform: translateY(-5px); 
-        }
-
-        .anime-card img { 
-            width: 100%; 
-            height: 300px;
-            object-fit: cover; 
-            background-color: #111; 
-            display: block;
-        }
-
         .card-info {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            flex-grow: 1;
-            padding: 12px;
-            box-sizing: border-box;
+            padding: 15px;
         }
-
-        .card-title { 
-            font-size: 15px;
-            font-weight: bold; 
+        .card-title {
             margin: 0 0 8px 0;
-            white-space: nowrap; 
-            overflow: hidden; 
-            text-overflow: ellipsis; 
-            color: var(--accent);
+            font-size: 18px;
+            color: var(--text-main);
         }
-
-        .card-genres { 
-            font-size: 11px;
-            color: #aaa; 
-            margin: 0;
+        .card-genres {
+            margin: 0 0 15px 0;
+            font-size: 14px;
+            color: var(--text-muted);
         }
-
         .watch-btn {
             display: block;
-            width: 100%;
-            padding: 8px 8px;
-            background-color: #ff4444;
-            color: white;
             text-align: center;
+            background-color: var(--accent);
+            color: #000;
+            padding: 10px 0;
+            border-radius: 6px;
             text-decoration: none;
-            border-radius: 4px;
-            cursor: pointer;
             font-weight: bold;
-            font-size: 13px;
-            letter-spacing: 0.5px;
-            margin-top: 12px;
-            transition: background-color 0.2s ease;
-            box-sizing: border-box;
+            transition: background 0.2s ease;
         }
-
         .watch-btn:hover {
-            background-color: #cc3333;
-        }
-
-        .video-unavailable {
-            color: #666;
-            font-size: 12px;
-            text-align: center;
-            padding-top: 10px;
-        }
-
-        .js-error-msg {
-            color: #ff4444;
-            padding: 20px;
-            text-align: center;
-            font-weight: bold;
-            border: 2px dashed #ff4444;
-            margin: 20px 40px;
-            display: none;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Адаптация для мобильных */
-        @media (max-width: 768px) {
-            header {
-                flex-direction: column;
-                gap: 15px;
-                padding: 15px 20px;
-            }
-
-            .search-bar { width: 100%; }
-            h2 { padding: 15px 20px; font-size: 20px; }
-            .catalog-grid {
-                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-                gap: 15px;
-                padding: 0 20px;
-            }
-            .anime-card img { height: 200px; }
-            .card-title { font-size: 13px; }
+            background-color: #e6e6c8;
         }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="logo">AniVan</div>
-        <input type="text" class="search-bar" placeholder="Быстрый поиск аниме..." oninput="filterAnimes(this.value)">
-        <button class="profile-btn">Профиль</button>
+        <a href="index.html" class="logo">AniVan</a>
+        <div class="search-box">
+            <input type="text" placeholder="Поиск аниме..." oninput="filterAnimes(this.value)">
+        </div>
     </header>
 
-    <main>
-        <h2>Популярные новинки</h2>
-        <div class="catalog-grid" id="catalog"></div>
-        <div id="js-error" class="js-error-msg">
-            ОШИБКА: JavaScript не смог загрузить список аниме. Проверьте консоль (F12).
+    <div class="catalog-container">
+        <div class="grid" id="catalog">
+            <!-- Сюда JavaScript вставит карточки -->
         </div>
-    </main>
+    </div>
 
     <script>
-    console.log("Скрипт запущен...");
+        // База данных с реальными Shikimori ID для точного плеера
+        const animes = [
+            { id: "48413", title: "Эта фарфоровая кукла влюбилась", genres: "Романтика, Школа", image: "images/porcelain-doll.jpg" },
+            { id: "19815", title: "Токийский Гуль", genres: "Ужасы, Драма", image: "images/tokyo-ghoul.jpg" },
+            { id: "16498", title: "Атака титанов", genres: "Экшен, Драма", image: "images/attack-on-titan.jpg" },
+            { id: "20", title: "Наруто Ураганные Хроники", genres: "Приключения, Экшен", image: "images/naruto.jpg" }
+        ];
 
-    // ТУТ НАЗВАНИЯ АБСОЛЮТНО ЧИСТЫЕ (без дефисов и пробелов по краям!)
-    const animes = [
-        { title: "Эта фарфоровая кукла влюбилась", genres: "Романтика, Школа", image: "images/porcelain-doll.jpg" },
-        { title: "Токийский Гуль", genres: "Ужасы, Драма", image: "images/tokyo-ghoul.jpg" },
-        { title: "Атака титанов", genres: "Экшен, Драма", image: "images/attack-on-titan.jpg" },
-        { title: "Наруто Ураганные Хроники", genres: "Приключения, Экшен", image: "images/naruto.jpg" }
-    ];
+        function filterAnimes(query) {
+            const container = document.getElementById('catalog');
+            if (!container) return;
 
-    function openProfile() {
-        alert('Здесь откроется страница профиля пользователя');
-    }
+            const searchTerm = query.toLowerCase().trim();
+            let htmlContent = '';
 
-    function filterAnimes(query) {
-        const container = document.getElementById('catalog');
-        if (!container) return;
+            animes.forEach(function(anime) {
+                if (anime.title.toLowerCase().includes(searchTerm)) {
+                    htmlContent += '<div class="anime-card">';
+                    htmlContent += '<img src="' + anime.image + '" alt="' + anime.title + '" onerror="this.src=\'https://placeholder.com\'">';
+                    htmlContent += '<div class="card-info">';
+                    htmlContent += '<h3 class="card-title">' + anime.title + '</h3>';
+                    htmlContent += '<p class="card-genres">' + anime.genres + '</p>';
+                    // Передаем в ссылку и название (t), и уникальный ID аниме (id)
+                    htmlContent += '<a href="watch.html?t=' + encodeURIComponent(anime.title) + '&id=' + anime.id + '" class="watch-btn">Смотреть</a>';
+                    htmlContent += '</div>';
+                    htmlContent += '</div>';
+                }
+            });
 
-        const searchTerm = query.toLowerCase().trim(); // Очищаем пробелы при поиске
-        let htmlContent = '';
-
-        animes.forEach(function(anime) {
-            if (anime.title.toLowerCase().includes(searchTerm)) {
-                htmlContent += '<div class="anime-card">';
-                htmlContent += '<img src="' + anime.image + '" alt="' + anime.title + '" onerror="this.src=\'https://placeholder.com\'">';
-                htmlContent += '<div class="card-info">';
-                htmlContent += '<h3 class="card-title">' + anime.title + '</h3>';
-                htmlContent += '<p class="card-genres">' + anime.genres + '</p>';
-                // Идеальная ссылка без дефисов
-                // Теперь кнопка передает и название, и наш проверочный ID!
-                htmlContent += '<a href="watch.html?t=' + encodeURIComponent(anime.title) + '&id=19815" class="watch-btn">Смотреть</a>';
-                htmlContent += '</div>';
-                htmlContent += '</div>';
+            if (htmlContent === '') {
+                container.innerHTML = '<p style="color:#aaa; text-align:center; width:100%;">Ничего не найдено 😔</p>';
+            } else {
+                container.innerHTML = htmlContent;
             }
+        }
+
+        window.addEventListener('load', function() {
+            filterAnimes('');
         });
-
-        if (htmlContent === '') {
-            container.innerHTML = '<p style="color:#aaa; margin-top:20px; text-align:center;">Ничего не найдено 😔</p>';
-        } else {
-            container.innerHTML = htmlContent;
-        }
-    }
-
-    function renderCatalog() {
-        filterAnimes('');
-    }
-
-    window.addEventListener('load', function() {
-        renderCatalog();
-        const profileBtn = document.querySelector('.profile-btn');
-        if (profileBtn) {
-            profileBtn.addEventListener('click', openProfile);
-        }
-    });
-</script>
-
+    </script>
 </body>
 </html>
