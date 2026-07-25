@@ -68,7 +68,7 @@
     
     <div class="player-container">
         <iframe id="anime-player" src="" frameborder="0" allowfullscreen>
-            Ваш браузер не поддерживает встроенные видео.
+            Ваш browser не поддерживает встроенные видео.
         </iframe>
     </div>
 
@@ -78,9 +78,8 @@
         </a>
     </div>
 
-        <script>
+    <script>
         const params = new URLSearchParams(window.location.search);
-        // Очищаем название от возможного лишнего дефиса в начале строки
         let title = params.get('t');
         if (title && title.startsWith('-')) {
             title = title.substring(1);
@@ -93,17 +92,16 @@
             titleEl.textContent = title;
             document.title = title + " - AniVan";
 
-            // 1. ТЕПЕРЬ ПЕРЕМЕННАЯ СОЗДАНА: Безопасно кодируем название аниме
+            // 1. Безопасно кодируем название аниме
             const encodedTitle = encodeURIComponent(title);
 
-            // 2. ИСПРАВЛЕНО: Полный и правильный адрес для автопоиска плеера
-            playerEl.src = "https://vidsrc.cc" + encodedTitle;
+            // 2. ИСПРАВЛЕНО: Рабочий и точный путь для автопоиска аниме через стабильный Kodik
+            playerEl.src = "https://kodikapi.com" + encodedTitle + "&hide_selectors=false";
 
         } else {
             titleEl.textContent = "Ошибка: аниме не найдено";
             titleEl.style.color = "#ff4d4d";
         }
     </script>
-
 </body>
 </html>
