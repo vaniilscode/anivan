@@ -94,8 +94,8 @@
             titleEl.textContent = title;
             document.title = title + " - AniVan";
 
-            // ПОДКЛЮЧАЕМ ПРЯМОЙ ОНЛАЙН-ФАЙЛ (короткий аниме-клип из открытого облака архива интернета)
-            playerEl.src = "https://archive.org";
+            // Используем мега-балансер Kinobox, который ты откопал в коде!
+playerEl.src = "https://kinobox.tv" + encodedTitle;
 
         } else {
             titleEl.textContent = "Ошибка: аниме не найдено";
