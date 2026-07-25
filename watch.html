@@ -25,12 +25,14 @@
             margin-top: 30px;
             margin-bottom: 10px; 
             text-align: center;
+            color: #fff;
         }
         .player-container {
             width: 90%;
             max-width: 1000px;
             margin-top: 20px;
         }
+        /* Адаптивный фрейм для отображения плеера */
         iframe {
             width: 100%;
             aspect-ratio: 16 / 9;
@@ -38,6 +40,7 @@
             border-radius: 16px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             display: block;
+            margin: 0 auto;
             background-color: #000;
         }
         .navigation-box {
@@ -58,14 +61,19 @@
         .back-btn:hover {
             background-color: var(--btn-hover);
         }
+        @media (max-width: 768px) {
+            h1 { font-size: 20px; padding: 0 15px; margin-top: 15px; }
+            .player-container { width: 95%; margin-top: 10px; }
+            iframe { border-radius: 8px; }
+        }
     </style>
 </head>
 <body>
 
-    <h1 id="episode-title">Загрузка серий...</h1>
+    <h1 id="episode-title">Загрузка плеера...</h1>
     
     <div class="player-container">
-        <!-- Используем iframe для подгрузки плеера по ID -->
+        <!-- Тег iframe для безопасного вывода встроенного видео плеера -->
         <iframe id="anime-player" src="" allowfullscreen></iframe>
     </div>
 
@@ -74,10 +82,9 @@
     </div>
 
     <script>
-        // Получаем параметры из ссылки
         const params = new URLSearchParams(window.location.search);
         let title = params.get('t');
-        let shikimoriId = params.get('id'); // Читаем ID из ссылки
+        let animeId = params.get('id'); // Считываем переданный ID из ссылки
 
         const playerEl = document.getElementById('anime-player');
         const titleEl = document.getElementById('episode-title');
@@ -87,11 +94,14 @@
             document.title = title + " - AniVan";
         }
 
-        // Если ID передан в ссылку — используем его, иначе ставим Токийского Гуля по умолчанию (19815)
-        const activeId = shikimoriId ? shikimoriId : "19815";
-
-        // Подключаем стабильный бесплатный плеер по ID
-        playerEl.src = "https://shikimori.io" + activeId;
+        // Если ID в ссылке есть, загружаем плеер, иначе ставим Токийского гуля по умолчанию
+        if (animeId) {
+            // Используем рабочий фрейм-балансер по ID
+            playerEl.src = "https://shikicinema.org" + animeId;
+        } else {
+            titleEl.textContent = "Ошибка: аниме не найдено в базе";
+            titleEl.style.color = "#ff4d4d";
+        }
     </script>
 </body>
 </html>
